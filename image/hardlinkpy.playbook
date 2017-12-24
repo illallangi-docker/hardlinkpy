@@ -1,0 +1,13 @@
+---
+- hosts: all
+  tasks:
+    - yum:
+        name: "nano"
+        state: "present"
+    - file:
+        path:  "/usr/local/bin/{{ item }}"
+        owner: "root"
+        group: "root"
+        mode:  "0777"
+      with_items:
+        - "hardlink.py"

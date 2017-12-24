@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - get_url:
+        url:      "https://github.com/illallangi/hardlinkpy/archive/{{ ansible_env.HARDLINKPY_COMMIT }}.tar.gz"
+        dest:     "/usr/local/src/hardlinkpy-{{ ansible_env.HARDLINKPY_COMMIT }}.tar.gz"
+        checksum: "sha256:{{ ansible_env.HARDLINKPY_SHA256 }}"
+    - unarchive:
+        src:     "/usr/local/src/hardlinkpy-{{ ansible_env.HARDLINKPY_COMMIT }}.tar.gz"
+        dest:    "/usr/local/src"
+        creates: "/usr/local/src/hardlinkpy-{{ ansible_env.HARDLINKPY_COMMIT }}/hardlink.py"

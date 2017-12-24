@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+while true
+do
+  /usr/local/bin/hardlink.py -s {{ ansible_env.HARDLINKPY_MINSIZE }} -c /hardlinkpy/ {{ ansible_env.HARDLINKPY_PATH }}
+  echo "Sleeping {{ ansible_env.HARDLINKPY_SLEEP }} Seconds"
+  echo "Press [CTRL+C] to stop.."
+	sleep {{ ansible_env.HARDLINKPY_SLEEP }}
+done

@@ -1,0 +1,28 @@
+---
+- hosts: all
+  tasks:
+    - fail:
+        msg: "{{ item }} is not defined. Typically you should run with: '-e {{ item }}=value'"
+      when:
+        - ansible_env[item] is not defined
+      with_items:
+        - "HARDLINKPY_PATH"
+        - "HARDLINKPY_MINSIZE"
+        - "HARDLINKPY_SLEEP"
+    - file:
+        path: "{{ ansible_env[item] }}"
+        state: "directory"
+        owner:  "{{ ansible_env.USER | default('docker') }}"
+        group: "{{ ansible_env.GROUP | default(ansible_env.USER | default('docker')) }}"
+      with_items:
+        - "HARDLINKPY_PATH"
+    - template:
+        src: "{{ item.name }}.j2"
+        dest: "{{ item.path }}/{{ item.name }}"
+        owner:  "{{ ansible_env.USER | default('docker') }}"
+        group: "{{ ansible_env.GROUP | default(ansible_env.USER | default('docker')) }}"
+        mode:  "{{ item.mode | default('0644') }}"
+      with_items:
+        - name: "hardlinkpy-entrypoint.sh"
+          path: "/usr/local/bin"
+          mode: "0755"
